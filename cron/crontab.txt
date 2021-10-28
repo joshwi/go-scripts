@@ -1,0 +1,2 @@
+0 9 * * TUE /app/collector -c='pfr_team_season' -q='MATCH (n:games) WHERE n.year="2020" RETURN DISTINCT n.homeTag as tag, n.year as year' >> /app/collection.log
+0 9 * * MON /app/collector -c='pfr_season_draft' -q='MATCH (n:picks) WHERE n.year="2020" RETURN DISTINCT n.year as year' >> /app/collection.log
