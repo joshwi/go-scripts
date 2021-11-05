@@ -38,7 +38,7 @@ func main() {
 	}
 
 	// Find parsing config requested by user
-	config := parser.Config{Name: "", Urls: []string{}, Params: []string{}, Parser: []parser.Parser{}}
+	config := utils.Config{Name: "", Urls: []string{}, Params: []string{}, Parser: []utils.Parser{}}
 
 	for _, item := range parser.CONFIG_LIST {
 		if name == item.Name {
@@ -50,7 +50,7 @@ func main() {
 	config.Parser = parser.Compile(config.Parser)
 
 	// Grab input parameters from  Neo4j
-	inputs := [][]parser.Tag{{parser.Tag{Name: "name", Value: config.Name}}}
+	inputs := [][]utils.Tag{{utils.Tag{Name: "name", Value: config.Name}}}
 
 	if len(query) > 0 {
 		inputs = graphdb.RunCypher(session, query)
