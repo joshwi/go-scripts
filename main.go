@@ -112,9 +112,36 @@ func strip(input [][]utils.Tag) string {
 	return output
 }
 
+func rotate(input map[string][]string) [][]string {
+
+	max := 0
+
+	for _, value := range input {
+		if len(value) > max {
+			max = len(value)
+		}
+	}
+
+	output := make([][]string, max+1)
+
+	for key, value := range input {
+		for n := range output {
+			if n == 0 {
+				output[n] = append(output[n], key)
+			} else if len(value) >= n {
+				output[n] = append(output[n], value[n-1])
+			} else {
+				output[n] = append(output[n], "")
+			}
+		}
+	}
+
+	return output
+}
+
 var audits = map[string][]utils.Tag{
 	"nfl": {
-		// {Name: "games", Value: "MATCH (n:games) RETURN n.label as label ORDER BY label"},
+		{Name: "games", Value: "MATCH (n:games) RETURN n.label as label ORDER BY label"},
 		{Name: "colors", Value: "MATCH (n:colors) RETURN n.label as label ORDER BY label"},
 	},
 }
@@ -139,7 +166,8 @@ func main() {
 		log.Println(err)
 	}
 
-	output := [][]string{}
+	// output := [][]string{}
+	changelog := map[string][]string{}
 	directory := fmt.Sprintf("%v/%v/%v", DIRECTORY, repo, collection)
 	audit := audits[collection]
 
@@ -147,6 +175,8 @@ func main() {
 		// log.Println(n, item.Name, item.Value)
 
 		old_text := utils.ReadTxt(directory + "/" + item.Name + ".txt")
+
+		diff_file := fmt.Sprintf("%v.txt", item.Name)
 
 		cypher_response := graphdb.RunCypher(session, item.Value)
 
@@ -156,46 +186,21 @@ func main() {
 		new := strings.Split(new_text, "\n")
 
 		diff := difference(old, new)
-		// log.Println(diff)
 
-		if len(output) == 0 {
-			output = append(output, []string{item.Name})
-		} else {
-			output[0] = append(output[0], item.Name)
+		err = utils.Write(directory, diff_file, new_text, 0777)
+
+		if err != nil {
+			log.Println(err)
 		}
 
-		for m, elem := range diff {
-			if len(output)-1 <= m {
-				// log.Println(elem)
-				output = append(output, []string{elem})
-			}
-		}
+		changelog[item.Name] = diff
 
 	}
 
-	log.Println(output)
-
-	// test := ReadCsv(directory + "/colors.csv")
-	// log.Println(test)
-
-	// err := WriteCsv(directory, "test.csv", [][]string{{"test", "test"}}, 0777)
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-
-	// for n := range diff {
-	// 	if len(output)+1 > n {
-	// 		log.Println(8)
-	// 		if output[n] == nil {
-	// 			log.Println(n, output[n])
-	// 		}
-	// 	}
-	// }
-
-	// err = utils.Write(directory, "games.txt", new_text, 0777)
-
-	// if err != nil {
-	// 	log.Println(err)
-	// }
+	output := rotate(changelog)
+	err = WriteCsv(directory, "audit.csv", output, 0777)
+	if err != nil {
+		log.Println(err)
+	}
 
 }
