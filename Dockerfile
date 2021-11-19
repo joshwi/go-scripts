@@ -12,7 +12,9 @@ WORKDIR /app/collector
 RUN GOOS=linux GOARCH=amd64 go build -o /app/deltadb-collector
 WORKDIR /app/audit
 RUN GOOS=linux GOARCH=amd64 go build -o /app/deltadb-audit
-RUN chmod 755 ./cron/entrypoint.sh
-RUN /usr/bin/crontab ./cron/crontab.txt
+RUN chmod 755 /app/cron/entrypoint.sh
+RUN /usr/bin/crontab /app/cron/crontab.txt
+WORKDIR /app
+RUN mkdir repos
 WORKDIR /app/cron
 CMD ["./entrypoint.sh"]
