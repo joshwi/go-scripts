@@ -47,8 +47,8 @@ github.com/joshwi/go-plugins v1.0.0 h1:2sRYrwDWU6p9IdUnmL16UORaJc8DMSx4qEXf2KLWb
 github.com/joshwi/go-plugins v1.0.0/go.mod h1:zy8f12cDQ3L4J6Ju5WoPhxF2++gzy7f17O5Z59uuVT0=
 github.com/joshwi/go-utils v1.0.0/go.mod h1:FDD5fPNq+iUTuQ8uPZefK/oE/nT9L+FdMAP7QD4O4RA=
 github.com/joshwi/go-utils v1.0.2/go.mod h1:FDD5fPNq+iUTuQ8uPZefK/oE/nT9L+FdMAP7QD4O4RA=
-github.com/joshwi/go-utils v1.0.3 h1:lwTsHK/pbbOme4YbWcVhE+yG6TKQZdl8YC9MSA7/5oM=
-github.com/joshwi/go-utils v1.0.3/go.mod h1:FDD5fPNq+iUTuQ8uPZefK/oE/nT9L+FdMAP7QD4O4RA=
+github.com/joshwi/go-utils v1.0.5 h1:Ww3V+HGo9oRLdNa0vYlY48tcbrk5zL1IEMyFVMLjrvg=
+github.com/joshwi/go-utils v1.0.5/go.mod h1:FDD5fPNq+iUTuQ8uPZefK/oE/nT9L+FdMAP7QD4O4RA=
 github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351 h1:DowS9hvgyYSX4TO5NpyC606/Z4SxnNYbT+WX27or6Ck=
 github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351/go.mod h1:CT57kijsi8u/K/BOFA39wgDQJ9CxiF4nAY/ojJ6r6mM=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
