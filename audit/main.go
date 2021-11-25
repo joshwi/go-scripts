@@ -89,4 +89,6 @@ func main() {
 		log.Println(err)
 	}
 
+	utils.Zip(directory, directory+".zip")
+
 }
