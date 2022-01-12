@@ -8,7 +8,7 @@ replace github.com/joshwi/go-scripts/git => ./git
 
 require (
 	github.com/joshwi/go-git v1.0.0
-	github.com/joshwi/go-plugins v1.0.0
-	github.com/joshwi/go-utils v1.0.6
+	github.com/joshwi/go-plugins v1.0.2
+	github.com/joshwi/go-utils v1.0.7
 	github.com/neo4j/neo4j-go-driver v1.8.3
 )
