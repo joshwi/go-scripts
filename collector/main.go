@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
 	"sync"
 
 	"github.com/joshwi/go-plugins/graphdb"
@@ -23,10 +24,10 @@ func main() {
 	flag.Parse()
 
 	// Pull in env variables: username, password, uri
-	username := utils.Env("NEO4J_USERNAME")
-	password := utils.Env("NEO4J_PASSWORD")
-	host := utils.Env("NEO4J_SERVICE_HOST")
-	port := utils.Env("NEO4J_SERVICE_PORT")
+	username := os.Getenv("NEO4J_USERNAME")
+	password := os.Getenv("NEO4J_PASSWORD")
+	host := os.Getenv("NEO4J_SERVICE_HOST")
+	port := os.Getenv("NEO4J_SERVICE_PORT")
 
 	// Create application session with Neo4j
 	uri := "bolt://" + host + ":" + port
