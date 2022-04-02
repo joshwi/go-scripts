@@ -1,33 +1,58 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"log"
 	"os"
 	"sync"
 
 	"github.com/joshwi/go-plugins/graphdb"
+	"github.com/joshwi/go-utils/logger"
 	"github.com/joshwi/go-utils/parser"
 	"github.com/joshwi/go-utils/utils"
 	"github.com/neo4j/neo4j-go-driver/neo4j"
 )
 
-func main() {
+var (
+	// Pull in env variables: username, password, uri
+	username = os.Getenv("NEO4J_USERNAME")
+	password = os.Getenv("NEO4J_PASSWORD")
+	host     = os.Getenv("NEO4J_SERVICE_HOST")
+	port     = os.Getenv("NEO4J_SERVICE_PORT")
 
 	// Init flag values
-	var query string
-	var name string
+	query    string
+	name     string
+	filename string
+	logfile  string
+)
+
+func init() {
 
 	// Define flag arguments for the application
-	flag.StringVar(&query, `q`, ``, `Specify config. Default: <empty>`)
+	flag.StringVar(&query, `q`, ``, `Run query to DB for input parameters. Default: <empty>`)
 	flag.StringVar(&name, `c`, `pfr_team_season`, `Specify config. Default: pfr_team_season`)
+	flag.StringVar(&filename, `f`, ``, `Location of parsing config file. Default: <empty>`)
+	flag.StringVar(&logfile, `l`, `./collection.log`, `Location of script logfile. Default: ./collection.log`)
 	flag.Parse()
 
-	// Pull in env variables: username, password, uri
-	username := os.Getenv("NEO4J_USERNAME")
-	password := os.Getenv("NEO4J_PASSWORD")
-	host := os.Getenv("NEO4J_SERVICE_HOST")
-	port := os.Getenv("NEO4J_SERVICE_PORT")
+	// Initialize logfile at user given path. Default: ./collection.log
+	logger.InitLog(logfile)
+
+	logger.Logger.Info().Str("config", name).Str("query", query).Str("status", "start").Msg("COLLECTION")
+}
+
+func main() {
+
+	// Open file with parsing configurations
+	fileBytes, err := utils.Read("pfr.json")
+	if err != nil {
+		log.Println(err)
+	}
+
+	var CONFIG []utils.Config
+	json.Unmarshal(fileBytes, &CONFIG)
 
 	// Create application session with Neo4j
 	uri := "bolt://" + host + ":" + port
@@ -41,7 +66,7 @@ func main() {
 	// Find parsing config requested by user
 	config := utils.Config{Name: "", Urls: []string{}, Params: []string{}, Parser: []utils.Parser{}}
 
-	for _, item := range parser.CONFIG_LIST {
+	for _, item := range CONFIG {
 		if name == item.Name {
 			config = item
 		}
@@ -57,8 +82,6 @@ func main() {
 		inputs = graphdb.RunCypher(session, query)
 	}
 
-	log.Println("COLLECTION - START")
-
 	var wg sync.WaitGroup
 
 	for _, entry := range inputs {
@@ -71,8 +94,8 @@ func main() {
 
 	wg.Wait()
 
-	log.Println("COLLECTION - DONE")
+	logger.Logger.Info().Str("config", name).Str("query", query).Str("status", "finish").Msg("COLLECTION")
 
-	// session.Close()
+	session.Close()
 
 }

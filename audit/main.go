@@ -14,11 +14,11 @@ import (
 )
 
 var (
-	DIRECTORY = utils.Env("DIRECTORY")
-	USERNAME  = utils.Env("NEO4J_USERNAME")
-	PASSWORD  = utils.Env("NEO4J_PASSWORD")
-	HOST      = utils.Env("NEO4J_SERVICE_HOST")
-	PORT      = utils.Env("NEO4J_SERVICE_PORT")
+	DIRECTORY = os.Getenv("DIRECTORY")
+	USERNAME  = os.Getenv("NEO4J_USERNAME")
+	PASSWORD  = os.Getenv("NEO4J_PASSWORD")
+	HOST      = os.Getenv("NEO4J_SERVICE_HOST")
+	PORT      = os.Getenv("NEO4J_SERVICE_PORT")
 )
 
 var audits = map[string][]utils.Tag{
