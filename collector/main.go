@@ -11,7 +11,7 @@ import (
 	"github.com/joshwi/go-utils/logger"
 	"github.com/joshwi/go-utils/parser"
 	"github.com/joshwi/go-utils/utils"
-	"github.com/neo4j/neo4j-go-driver/neo4j"
+	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
 
 var (
@@ -46,7 +46,7 @@ func init() {
 func main() {
 
 	// Open file with parsing configurations
-	fileBytes, err := utils.Read("pfr.json")
+	fileBytes, err := utils.Read(filename)
 	if err != nil {
 		log.Println(err)
 	}
@@ -58,10 +58,7 @@ func main() {
 	uri := "bolt://" + host + ":" + port
 	driver := graphdb.Connect(uri, username, password)
 	sessionConfig := neo4j.SessionConfig{AccessMode: neo4j.AccessModeWrite}
-	session, err := driver.NewSession(sessionConfig)
-	if err != nil {
-		log.Println(err)
-	}
+	session := driver.NewSession(sessionConfig)
 
 	// Find parsing config requested by user
 	config := utils.Config{Name: "", Urls: []string{}, Params: []string{}, Parser: []utils.Parser{}}
